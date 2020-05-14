@@ -57,6 +57,7 @@ export default {
       this.$emit('selectedVersion', {name:this.currentParmaName,versions: this.checkedVersions})
     },
     show(arr,name) {
+      console.log(arr)
       this.dialogVisible = true;
       this.checkedVersions = arr
       this.currentParmaName = name

@@ -86,7 +86,7 @@
         </div>
       </el-form-item>
       <el-form-item
-        label="选择适用版本："
+        label="选择指令适用版本："
         required
       >
         <el-checkbox-group v-model="checkVersionList">
@@ -94,6 +94,7 @@
             v-for="(item,index) of venderList"
             :key="index"
             :label="item.version"
+            @change="handelChangeParamsVertion"
           ></el-checkbox>
         </el-checkbox-group>
         <router-link to="/" v-if="!venderList.length">暂无网元版本,点击去新增网元</router-link >
@@ -118,6 +119,7 @@
               <td>参数中文名称</td>
               <td>是否必填</td>
               <td>参数描述</td>
+              <td>适用版本</td>
               <td>操作</td>
             </tr>
           </thead>
@@ -165,6 +167,10 @@
                 >
                 </div>
               </td>
+              <td style="cursor:pointer" @click="showParamVersion(item)">
+                <!-- 请选择参数适用版本 -->
+                <p v-for="version of item.list" :key="version">{{version}}</p>
+              </td>
               <td class="handle">
                 <el-button
                   size="mini"
@@ -191,6 +197,7 @@
               <td>参数中文名称</td>
               <td>是否必填</td>
               <td>参数描述</td>
+              <td>适用版本</td>
             </tr>
           </thead>
           <tbody
@@ -231,9 +238,14 @@
                 <div
                   contenteditable="true"
                   v-html="item.parameterDescribe"
-                  @blur="handleIntro(item,$event)"
+                  @blur="handleIntro(item,
+                  $event)"
                 >
                 </div>
+              </td>
+              <td style="cursor:pointer" @click="showParamVersion(item)">
+                <!-- 请选择参数适用版本 -->
+                <p v-for="version of item.list" :key="version">{{version}}</p>
               </td>
             </tr>
           </tbody>
@@ -322,6 +334,9 @@
       @setVersion="get_instruct"
     ></version-model>
     <used-model ref="used" :instruct-used = instructUsed></used-model>
+    <param-version-model ref="paramVersionModel"
+    :check-version-list="checkVersionList"
+    @selectedVersion="setParamsVersion"></param-version-model>
      <!--责任说明弹框-->
     <agreement ref="agreement"></agreement>
   </div>
@@ -332,6 +347,7 @@ import { mapGetters, mapState } from "vuex";
 import {readzl} from '@/utiles/instruct.js'
 import VersionModel from "./components/version-model.vue";
 import UsedModel from './components/used-model.vue'
+import ParamVersionModel from './components/param-version-model.vue'
 import agreement from "@/components/agreement";
 const filterCode = (code) => {
   if(code) {
@@ -372,7 +388,8 @@ export default {
   components: {
     VersionModel,
     agreement,
-    UsedModel
+    UsedModel,
+    ParamVersionModel
   },
   created() {
     let id = this.$route.query.id;
@@ -457,9 +474,44 @@ export default {
     instructType() {
       this.instructData.instructCode = ''
       this.params = []
+    },
+    checkVersionList(newVal) {
+      if(!newVal.length) {
+        this.params.forEach(param =>{
+          param.list = []
+        })
+      }else {
+
+      }
     }
   },
   methods: {
+    handelChangeParamsVertion(val,e) {
+      let value = e.target.defaultValue
+      if(!val) { // 剔除掉参数表中已选择的版本号
+        this.params.forEach(param => {
+          let i = param.list.findIndex(version => version==value)
+          if(i>-1) {
+            param.list.splice(i,1)
+          }
+        })
+      }
+    },
+    showParamVersion({list,parameterCode}) { // 弹出参数模态框
+      if(!this.checkVersionList.length) {
+        alert('请先选择指令使用版本')
+        return
+      }
+      this.$refs.paramVersionModel.show(list,parameterCode)
+    },
+    setParamsVersion({name,versions}) { //设置参数适用版本
+      console.log(name)
+      this.params.forEach(param => {
+        if(param.parameterCode === name) {
+          param.list = versions
+        }
+      })
+    },
     formatt() {
       this.params = readzl(this.instructData.instructCode)
     },
@@ -564,7 +616,8 @@ export default {
         parameterZh: "",
         paramNotNull: 0, // 是否必填
         parameterDescribe: "",
-        paramVal: ""
+        paramVal: "",
+        list:[]
       });
     },
     del_param(i) {

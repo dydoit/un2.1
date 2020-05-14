@@ -12,5 +12,5 @@ export const readzl = (str) => {
       break
     }
   }
-  return [...new Set(arr)].map(item => ({parameterCode:item, paramVa: '',paramNotNull:'0',parameterDescribe:''}))
+  return [...new Set(arr)].map(item => ({parameterCode:item, paramVa: '',paramNotNull:'0',parameterDescribe:'',list:[]}))
 }
