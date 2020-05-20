@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App'
+import Bpp from './Bpp'
 import Axios from './api'
 import router from './router'
 import store from './store'
@@ -15,5 +15,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: h => h(Bpp)
 })

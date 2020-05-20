@@ -1,6 +1,6 @@
 export default [
   {
-    path:'/network',
+    path:'network',
     component:() =>import('@/components/layout/content.vue'),
     children: [
       {
@@ -12,7 +12,7 @@ export default [
         component: () => import('@/views/network/networkList.vue'),
         meta: {
           name:'网元列表',
-          parentPath: '/network'
+          parentPath: '/home/network'
         }
       },
       {
@@ -20,7 +20,7 @@ export default [
         component:() => import('@/views/network/networkDetail.vue'),
         meta: {
           name: '网元详情',
-          parentPath: '/network',
+          parentPath: '/home/network',
           parentName: '网元管理',
         }
       },
@@ -29,7 +29,7 @@ export default [
         component:() => import('@/views/network/networkChildDetail.vue'),
         meta: {
           name: '网元详情',
-          parentPath: '/network',
+          parentPath: '/home/network',
           parentName: '网元管理',
         }
       },
@@ -38,7 +38,7 @@ export default [
         component: () => import('@/views/network/networkAdd.vue'),
         meta: {
           name: '网元编辑',
-          parentPath: '/network',
+          parentPath: '/home/network',
           parentName: '网元管理',
         }
       }

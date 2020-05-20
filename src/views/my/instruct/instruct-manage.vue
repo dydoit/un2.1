@@ -505,7 +505,6 @@ export default {
       this.$refs.paramVersionModel.show(list,parameterCode)
     },
     setParamsVersion({name,versions}) { //设置参数适用版本
-      console.log(name)
       this.params.forEach(param => {
         if(param.parameterCode === name) {
           param.list = versions

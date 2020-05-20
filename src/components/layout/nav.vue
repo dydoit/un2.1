@@ -11,16 +11,16 @@
       <el-menu-item index="/network" v-if="handleShow(1001)">网元管理</el-menu-item>
       <el-submenu index="/my" v-if="handleShow(1003)">
         <template slot="title">我的</template>
-        <el-menu-item index="/my-instruction" v-if="handleShow(100301)">
+        <el-menu-item index="/home/my-instruction" v-if="handleShow(100301)">
          我的指令
         </el-menu-item>
-        <el-menu-item index="/my-instruction-temp" v-if="handleShow(100302)">
+        <el-menu-item index="/home/my-instruction-temp" v-if="handleShow(100302)">
          我的指令模板
         </el-menu-item>
-        <el-menu-item index="/my-task-temp" v-if="handleShow(100302)">
+        <el-menu-item index="/home/my-task-temp" v-if="handleShow(100302)">
          我的任务模板
         </el-menu-item>
-        <el-menu-item index="/my-task" v-if="handleShow(100304)">
+        <el-menu-item index="/home/my-task" v-if="handleShow(100304)">
          我的任务
         </el-menu-item>
       </el-submenu>

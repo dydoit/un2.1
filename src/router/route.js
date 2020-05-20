@@ -9,11 +9,21 @@ export default [
   },
   {
     path: '/home',
-    component: () => import('@/views/home/index.vue')
+    component: () => import('@/App.vue'),
+    children: [
+      {
+        path: '',
+        component: ()=> import('@/views/home/index.vue')
+      },
+      ...NetworkRoutes,
+      ...MyRoutes,
+      ...SetupRoutes
+    ]
   },
-  ...NetworkRoutes,
-  ...MyRoutes,
-  ...SetupRoutes
+  {
+    path: '/my-test',
+    component: ()=>import('@/views/my/instructTest/index.vue')
+  }
 ]
 
 
