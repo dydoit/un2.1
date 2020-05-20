@@ -14,7 +14,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <span>历史版本</span>
           <div class="about-group">
             <span>关于</span>
             <ul>
