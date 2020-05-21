@@ -39,16 +39,22 @@
     </div>
     <div class="content">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="解析脚本" name="first">
+          <p style="color:red">这是一段解析脚本</p>
+          </el-tab-pane>
+        <el-tab-pane label="输出模型" name="second">
+          <output-model></output-model>
+        </el-tab-pane>
+        <el-tab-pane label="角色管理" name="third">输入模型</el-tab-pane>
+        <el-tab-pane label="定时任务补偿" name="fourth">参数说明</el-tab-pane>
+        <el-tab-pane label="定时任务补偿" name="fifth">历史版本</el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 
 <script>
+  import outputModel from './components/outputModel.vue'
   export default {
     data() {
       return {
@@ -81,7 +87,7 @@
             ]
           }
         ],
-        activeName: 'first'
+        activeName: 'second'
       }
     },
     methods: {
@@ -89,10 +95,29 @@
         console.log(tab, event)
       }
     },
+    components: {
+      outputModel
+    }
   }
 </script>
 
 <style lang="stylus" scoped>
+.test-wrap
+  display flex
+  height 100%
+  flex-direction column
+  overflow hidden
+  .content
+    flex 1
+    overflow hidden
+    .el-tabs
+      display flex
+      flex-direction column
+      height 100%
+      overflow hidden
+      & >>> .el-tabs__content
+        flex 1
+        overflow auto
   .part1
     display flex
     justify-content space-between
@@ -131,6 +156,7 @@
     .right
       span
         margin-left 40px
+        font-size 12px
   .part2
     display flex
     align-items center
