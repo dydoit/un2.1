@@ -141,9 +141,9 @@ export default {
             equipmentTypeArr: 'equipmentTypeArr',
             instructTypeObj: 'dict/instructTypeObj'
         }),
-        
+
         //指令预览处理
-        filterCode() { 
+        filterCode() {
             return this.instructDetails.orderCode
         },
         //指令预览处理
@@ -167,7 +167,7 @@ export default {
             }
         },
         //指令预览处理
-        filterParameter2() {    
+        filterParameter2() {
             let str = "";
             let ffarr = this.instructDetails.instructParameter.filter(elem => elem.paramValue);
             return ffarr.reduce((last,cur) => {
@@ -184,15 +184,15 @@ export default {
         tabfun(index) {
             this.tabNum = index;
         },
-        
+
         //获取指令模板详情信息
         async getData(){
             let res = await this.$http.get('/OpsDev/orderAnalysis/getOrderAnalysisById',{
                 params:{
                 id:this.$route.query.id,
                 }
-            })    
-            this.instructDetails = res       
+            })
+            this.instructDetails = res
             if(res.instructParameter){
                 this.instructDetails.instructParameter = JSON.parse(res.instructParameter)
             }
@@ -201,7 +201,7 @@ export default {
             }else{
                 this.analysisCode = "# -*- coding: UTF-8 -*- \n#请在此方法下面编写您的代码 \ndef proc(ne,fb):"
             }
-            this.codeVal = this.analysisCode                      
+            this.codeVal = this.analysisCode
             this.getInstructType()
         },
         //
@@ -227,8 +227,8 @@ export default {
         //指定网元勾选，（单选）
         changeCheck(obj){
             this.feedback = ''
-            if(obj.checked){ // 如没有这属性，就在获取全部的数据的自己造这个属性进去   
-            this.netid = obj.id    
+            if(obj.checked){ // 如没有这属性，就在获取全部的数据的自己造这个属性进去
+            this.netid = obj.id
                 this.netList.map(item =>{
                     item.networkDeviceResult.map(child =>{
                         child.checked = false
@@ -365,7 +365,7 @@ export default {
         ctrlMouseMove(e) {
             const nowY = e.clientY
             if (this.preY <= 0) {
-            return
+              return
             }
             e.preventDefault()
             this.footHeight -= nowY - this.preY

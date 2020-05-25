@@ -1,7 +1,7 @@
 <template>
   <div class="output-wrap">
     <div class="btn-group">
-      <el-button type="text" icon="el-icon-document-copy">从模板仓库中复制</el-button>
+      <el-button type="text" icon="el-icon-document-copy" @click="showModel">从模板仓库中复制</el-button>
       <el-button type="text" icon="el-icon-upload" @click="saveModel">保存至模板仓库</el-button>
     </div>
     <el-form  size="small"
@@ -77,7 +77,7 @@
         </div>
       </el-form-item>
     </el-form>
-    <storage></storage>
+    <storage ref="storage" @used="copyParams"></storage>
   </div>
 </template>
 
@@ -130,6 +130,12 @@
         }else if(res.status == 'fail') {
           alert(`${res.msg}`)
         }
+      },
+      showModel() {
+        this.$refs.storage.show()
+      },
+      copyParams(parmas) {
+        this.params = parmas.slice()
       }
     },
     components: {
@@ -150,6 +156,7 @@ table
   border: 1px solid #ccc;
   border-collapse: collapse;
   line-height: 1.5;
+  font-size 12px
   thead
     background-color: #ddd;
     td
