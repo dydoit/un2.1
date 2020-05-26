@@ -78,7 +78,9 @@
           <el-tab-pane
             label="输入模型"
             name="third"
-          >输入模型</el-tab-pane>
+          >
+            <input-model></input-model>
+          </el-tab-pane>
           <el-tab-pane
             label="定时任务补偿"
             name="fourth"
@@ -133,6 +135,7 @@
 <script>
 const divHeight = 200
 import outputModel from "./components/outputModel.vue";
+import inputModel from './components/inputModel.vue'
 export default {
   data() {
     return {
@@ -171,7 +174,7 @@ export default {
           ]
         }
       ],
-      activeName: "second",
+      activeName: "third",
       footHeight: divHeight,
       prevY: '',
       isCanMove: true,
@@ -213,7 +216,8 @@ export default {
     }
   },
   components: {
-    outputModel
+    outputModel,
+    inputModel
   }
 };
 </script>
