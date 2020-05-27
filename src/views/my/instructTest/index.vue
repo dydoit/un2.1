@@ -82,11 +82,11 @@
             <input-model></input-model>
           </el-tab-pane>
           <el-tab-pane
-            label="定时任务补偿"
+            label="参数说明"
             name="fourth"
           >参数说明</el-tab-pane>
           <el-tab-pane
-            label="定时任务补偿"
+            label="历史版本"
             name="fifth"
           >历史版本</el-tab-pane>
         </el-tabs>

@@ -172,7 +172,7 @@
       },
       goEdit(id) {
         this.$router.push({
-          path: '/my-instruction/instruct-manage',
+          path: '/home/my-instruction/instruct-manage',
           query: {id}
         })
       },
