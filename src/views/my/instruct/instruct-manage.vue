@@ -304,6 +304,7 @@
         <p>
           <el-checkbox v-model="isRead">
             同意并详细阅读<span
+            
             @click="showAgreement"
             >&lt;&lt;责任说明&gt;&gt;</span>
           </el-checkbox>

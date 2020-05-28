@@ -79,16 +79,25 @@
             label="输入模型"
             name="third"
           >
-            <input-model></input-model>
+            <input-model
+            :instruct-code="instructCode"
+            :equipment-company="equipmentCompany"
+            :equipment-type="equipmentType"
+            :params="params"
+            ></input-model>
           </el-tab-pane>
           <el-tab-pane
             label="参数说明"
             name="fourth"
-          >参数说明</el-tab-pane>
+          >
+            <param-intro :params="parmasIntro"></param-intro>
+          </el-tab-pane>
           <el-tab-pane
             label="历史版本"
             name="fifth"
-          >历史版本</el-tab-pane>
+          >
+            <version-history></version-history>
+          </el-tab-pane>
         </el-tabs>
       </div>
       <div class="content-part2" :style="{height: footHeight+'px'}">
@@ -106,7 +115,7 @@
                 label="运行结果"
                 name="运行结果"
               >
-                <p style="color:red">运行结果</p>
+                <run-result></run-result>
               </el-tab-pane>
               <el-tab-pane
                 label="示例报文"
@@ -136,6 +145,10 @@
 const divHeight = 200
 import outputModel from "./components/outputModel.vue";
 import inputModel from './components/inputModel.vue'
+import runResult from './components/runResult.vue'
+import sampleResult from './components/sampleResult.vue'
+import paramIntro from './components/paramIntro.vue'
+import versionHistory from './components/versionHistory.vue'
 export default {
   data() {
     return {
@@ -178,8 +191,19 @@ export default {
       footHeight: divHeight,
       prevY: '',
       isCanMove: true,
-      activeTab: '报文'
+      activeTab: '运行结果',
+      instructCode:'',
+      equipmentCompany:'',
+      equipmentType:'',
+      params:[],
+      parmasIntro: []
     };
+  },
+  created() {
+    let id = this.$route.query.id
+    if(id) {
+      this.getOrderData(id)
+    }
   },
   mounted() {
     let div = document.querySelector('#el_tabs > .el-tabs__header')
@@ -194,6 +218,39 @@ export default {
 
   },
   methods: {
+     async getOrderData(id) {
+      let res = await this.$http.get('/OpsDev/order/getOrderById',{
+        params:{
+          id,
+        }
+      })
+      console.log(res)
+      let {instructCode,equipmentCompany, equipmentType, orderParameterList} = res
+      this.instructCode = instructCode
+      this.equipmentCompany = equipmentCompany
+      this.equipmentType = equipmentType
+      this.params = orderParameterList.length? orderParameterList.map(item => {
+        return {
+          paramKey: item.parameterCode,
+          paramValue: "",
+          paramKeyZh: item.parameterZh,
+          paramNotNull: item.paramNotNull-0,
+          disabled: false,
+          checkType: 0, //检验方式
+          paramExtent: "", //参数范围
+          orderParameterEquipmentVersionList: item.orderParameterEquipmentVersionList?item.orderParameterEquipmentVersionList:[]
+        }
+      }):[]
+      this.parmasIntro = orderParameterList.length? orderParameterList.map(item => {
+        return {
+          paramKey: item.parameterCode,
+          paramKeyZh: item.parameterZh,
+          paramNotNull: item.paramNotNull-0,
+          parameterDescribe: item.parameterDescribe,
+          list: item.orderParameterEquipmentVersionList?item.orderParameterEquipmentVersionList.map(vs => vs.equipmentVersion):[]
+        }
+      }):[]
+    },
     move(e) {
       if(this.isCanMove) {
         let moveLength = e.clientY - this.prevY
@@ -217,7 +274,11 @@ export default {
   },
   components: {
     outputModel,
-    inputModel
+    inputModel,
+    runResult,
+    sampleResult,
+    paramIntro,
+    versionHistory
   }
 };
 </script>
@@ -254,6 +315,7 @@ export default {
       & >>> .el-tabs__content {
         flex: 1;
         overflow: auto;
+        padding 10px
       }
       & >>> .el-tabs__header {
         margin: 0;

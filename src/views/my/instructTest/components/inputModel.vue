@@ -107,17 +107,10 @@ export default {
   data() {
     return {
       options,
-      instructCode: '',
-      params: [],
       selectedParams:[]
     };
   },
-  created() {
-    let id = this.$route.query.id
-    if(id) {
-      this.getOrderData(id)
-    }
-  },
+  props: ['instructCode', 'equipmentCompany', 'equipmentType','params'],
   computed: {
     ...mapGetters({
       instructTypeObj: 'dict/instructTypeObj'
@@ -200,30 +193,6 @@ export default {
     }
   },
   methods: {
-    async getOrderData(id) {
-      let res = await this.$http.get('/OpsDev/order/getOrderById',{
-        params:{
-          id,
-        }
-      })
-      let {instructCode,equipmentCompany, equipmentType, orderParameterList} = res
-      this.instructCode = instructCode
-      this.equipmentCompany = equipmentCompany
-      this.equipmentType = equipmentType
-      this.params = orderParameterList.length? orderParameterList.map(item => {
-        return {
-          paramKey: item.parameterCode,
-          paramValue: "",
-          paramKeyZh: item.parameterZh,
-          paramNotNull: item.paramNotNull-0,
-          disabled: false,
-          checkType: 0, //检验方式
-          paramExtent: "", //参数范围
-          orderParameterEquipmentVersionList: item.orderParameterEquipmentVersionList?item.orderParameterEquipmentVersionList:[]
-        }
-      }):[]
-      console.log(res)
-    },
     handleTypeChange(item) {
       item.paramValue = ''
       if(item.checkType == 3) {
