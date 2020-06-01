@@ -4,6 +4,7 @@ import Axios from './api'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui';
+import './utiles/dispatch.js' // 注意有自定义的部分
 import './styles/global.styl'
 import 'element-ui/lib/theme-chalk/index.css';
 import {permission} from './utiles/directive'

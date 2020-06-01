@@ -67,7 +67,7 @@
             label="解析脚本"
             name="first"
           >
-            <p style="color:red">这是一段解析脚本</p>
+            <code-edit :value="code" v-if="code"></code-edit>
           </el-tab-pane>
           <el-tab-pane
             label="输出模型"
@@ -149,6 +149,7 @@ import runResult from './components/runResult.vue'
 import sampleResult from './components/sampleResult.vue'
 import paramIntro from './components/paramIntro.vue'
 import versionHistory from './components/versionHistory.vue'
+import codeEdit from './components/codeEdit.vue'
 export default {
   data() {
     return {
@@ -187,7 +188,7 @@ export default {
           ]
         }
       ],
-      activeName: "third",
+      activeName: "first",
       footHeight: divHeight,
       prevY: '',
       isCanMove: true,
@@ -196,13 +197,18 @@ export default {
       equipmentCompany:'',
       equipmentType:'',
       params:[],
+      code: '',
       parmasIntro: []
     };
   },
   created() {
     let id = this.$route.query.id
+    let modelId = this.$route.query.model_id
     if(id) {
       this.getOrderData(id)
+    }
+    if(modelId) {
+      this.getModelData(modelId)
     }
   },
   mounted() {
@@ -218,13 +224,21 @@ export default {
 
   },
   methods: {
+    async getModelData(id) {
+      let res = await this.$http.get(`/OpsDev/orderAnalysis/getOrderAnalysisById`, {
+        params: {id}
+      })
+      if(res) {
+        let {analysisCode} = res
+        this.code  = analysisCode?analysisCode:"# -*- coding: UTF-8 -*- \n#请在此方法下面编写您的代码 \ndef proc(ne,fb):"
+      }
+    },
      async getOrderData(id) {
       let res = await this.$http.get('/OpsDev/order/getOrderById',{
         params:{
           id,
         }
       })
-      console.log(res)
       let {instructCode,equipmentCompany, equipmentType, orderParameterList} = res
       this.instructCode = instructCode
       this.equipmentCompany = equipmentCompany
@@ -278,7 +292,8 @@ export default {
     runResult,
     sampleResult,
     paramIntro,
-    versionHistory
+    versionHistory,
+    codeEdit
   }
 };
 </script>

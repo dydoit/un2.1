@@ -189,7 +189,7 @@ export default {
         async getData(){
             let res = await this.$http.get('/OpsDev/orderAnalysis/getOrderAnalysisById',{
                 params:{
-                id:this.$route.query.id,
+                  id:this.$route.query.id,
                 }
             })
             this.instructDetails = res
