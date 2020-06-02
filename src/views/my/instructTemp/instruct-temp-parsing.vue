@@ -251,6 +251,7 @@ export default {
                     netId:this.netid,
                 }
             })
+            console.log(res)
             this.loading1 = false
             if(res.status=='success'){
                 if(res.item.status=='success'){
@@ -299,7 +300,7 @@ export default {
                     transformRequest: [function (data) {
                     let ret = ''
                     for (let it in data) {
-                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                      ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
                     }
                     return ret
                 }],

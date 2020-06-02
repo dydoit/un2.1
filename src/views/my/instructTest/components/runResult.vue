@@ -9,7 +9,7 @@
         <el-radio-button :label="true">table展示</el-radio-button>
         <el-radio-button :label="false">json展示</el-radio-button>
       </el-radio-group>
-      <el-button size="mini">设为示例</el-button>
+      <el-button size="mini" @click="setExam">设为示例</el-button>
     </div>
     <div>
       <table v-show="isTable">
@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item of result" :key="item.key">
+          <tr v-for="item of resultTableArr" :key="item.key">
             <td>
               {{item.key}}
             </td>
@@ -33,7 +33,7 @@
       <div class="res-json" v-show="!isTable">
         {
            <ul >
-            <li v-for="(val,key,index) in resultJson" :key="index">
+            <li v-for="(val,key,index) in runResult" :key="index">
               <span>{{key}}</span>:
               <span>{{val instanceof Object?JSON.stringify(val):val}}</span>
             </li>
@@ -47,43 +47,44 @@
 
 <script>
 export default {
+  props: {
+    id: {
+      type:String,
+      require: true
+    },
+    runResult: {
+      type: Object
+    }
+  },
   data() {
     return {
-      isTable: true,
-      result: [
-        {
-          key:'script ',
-          value:'测试脚本'
-        },
-        {
-          key: 'command',
-          value: '指令'
-        },
-        {
-          key:'equitment',
-          value:'华为'
-        },
-        {
-          key: 'outparam',
-          value: {
-            status: 200,
-            msg: 'hello'
-          }
-        }
-      ]
+      isTable: true
     };
   },
   computed: {
-    resultJson() {
-      return this.result.reduce((last,cur)=> {
-        return {
-          ...last,
-          [cur.key]: cur.value
+    resultTableArr() {
+      return Object.keys(this.runResult).map(key => {
+        return  {
+          key,
+          value: this.runResult[key]
         }
-      },{})
+      })
     }
   },
-  
+  methods: {
+    async setExam() {
+      let res = await this.$http.get('/OpsDev/orderAnalysis/saveAnalysisForExampleResult', {
+        params:{
+          id: this.id,
+          exampleResult: JSON.stringify(this.runResult)
+        }
+      })
+      if(res.status=='success') {
+        this.$message.success('设置成功')
+      }
+    }
+  },
+
 };
 </script>
 

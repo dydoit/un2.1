@@ -68,6 +68,7 @@ export default {
     editor.setValue(this.value || this.code);
     editor.on('change', code => {
       this.code = editor.getValue();
+      this.$emit('codeChange', this.code)
     })
   }
 };
