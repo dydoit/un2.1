@@ -39,6 +39,7 @@
         <i
           class="iconfont icon-baocun"
           title="保存"
+          @click="save"
         ></i>
         <i
           class="iconfont icon-fabu"
@@ -86,7 +87,11 @@
             label="输出模型"
             name="second"
           >
-            <output-model></output-model>
+            <output-model
+            :output-model-name="outputModelName"
+            :output-model-detail-list="outputModelDetailList"
+            @outChange="handleChangeOutput"
+            ></output-model>
           </el-tab-pane>
           <el-tab-pane
             label="输入模型"
@@ -232,7 +237,7 @@ export default {
       equipmentCompany: "",
       equipmentType: "",
       params: [],
-      code: "",
+      code: "", // 解析代码
       netId: "", //网元id
       parmasIntro: [],
       orderId: "", //指令id
@@ -246,7 +251,9 @@ export default {
       examResult: '', //示例结果
       modelProperty: {},  // 模板属性
       equipmentVersion: '' , //指令适用设备版本
-      instructParameter: [], // 指令模板自带参数
+      instructParameter: [], // 指令模板自带参数,输入模型
+      outputModelName: '', //输出模型名字
+      outputModelDetailList: [], // 输出模型出参详情数组
     };
   },
   created() {
@@ -321,6 +328,10 @@ export default {
     };
   },
   methods: {
+    handleChangeOutput({name, params}) {
+      this.outputModelName = name
+      this.outputModelDetailList = params
+    },
     async setExam() { //设为示例报文
       let res = await this.$http('/OpsDev/orderAnalysis/saveAnalysisForExampleFeedback', {
         params: {
@@ -339,7 +350,7 @@ export default {
     handleCodeChange(code) {
       this.code = code;
     },
-    async getOrderMessage() {
+    async getOrderMessage() { //获取报文
       this.loading = true;
       let res = await this.$http.get(
         "/OpsDev/orderAnalysis/testOrderAnalysis",
@@ -511,7 +522,29 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    handleChangeTab() {}
+    handleChangeTab() {},
+    async save  () { // 保存
+      let res = await this.$http.post('/OpsDev/orderAnalysis/saveAllOrderAnalysis', {
+        id: this.modelId,
+        analysisCodeDev: this.code,
+        instructParameter: '[]',
+        orderAnalysisOutputModelDto: {
+          modelName: this.outputModelName,
+          orderAnalysisId: this.modelId,
+          orderAnalysisOutputModelDetailsList: this.outputModelDetailList.length
+          ?this.outputModelDetailList.map(param => {
+            return {
+              ...param,
+              modelId: this.modelId
+            }
+          }): []
+        }
+      })
+      console.log(res)
+    },
+    async publish() { // 发布
+
+    }
   },
   components: {
     outputModel,

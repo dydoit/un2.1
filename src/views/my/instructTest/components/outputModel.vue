@@ -84,6 +84,11 @@
 <script>
   import Storage from './storage.vue'
   export default {
+    props:['outputModelName', 'outputModelDetailList'],
+    mounted() {
+      this.outputData.modelName = this.outputModelName
+      this.params = this.outputModelDetailList.slice()
+    },
     data() {
       return {
         outputData: {
@@ -94,20 +99,19 @@
         ]
       }
     },
-    created() {
-      this.$http.get('/OpsDev/orderAnalysisOutputModel/getAnalysisModelListByName',{
-        params: {
-          name: '测试模型'
-        }
-      }).then(res => {
-        console.log(res)
-      })
+    watch: {
+      'outputData.modelName'() {
+        this.handleChange()
+      },
+      params() {
+        this.handleChange()
+      }
     },
     methods: {
       add_param() {
         this.params.push({
           parameterCode: "", //参数变量名
-          parameterType: 0, // 是否必填
+          parameterType: '0', // 是否必填
           parameterDescribe: "" // 参数描述
         });
       },
@@ -136,6 +140,12 @@
       },
       copyParams(parmas) {
         this.params = parmas.slice()
+      },
+      handleChange() {
+        this.$emit('outChange', {
+          name:this.outputData.modelName,
+          params: this.params
+        })
       }
     },
     components: {
