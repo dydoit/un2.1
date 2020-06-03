@@ -163,7 +163,7 @@ export default {
         filterCode2() {
             let code = this.instructDetails.orderCode
             if(code) {
-            return code.replace( /\$\{(.*?)\}/g,'').replace(/:/g, '').replace(/;/g, '')
+              return code.replace( /\$\{(.*?)\}/g,'').replace(/:/g, '').replace(/;/g, '')
             }
         },
         //指令预览处理

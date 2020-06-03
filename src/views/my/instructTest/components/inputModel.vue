@@ -25,6 +25,11 @@
             <td>参数值</td>
           </tr>
         </thead>
+        <tbody v-if="!selectedParams.length">
+          <tr class="no-data">
+            <td colspan="5">暂无数据</td>
+          </tr>
+        </tbody>
         <tbody>
           <tr v-for="(item,index) of selectedParams" :key="index">
             <td >{{item.paramKey}}</td>
@@ -87,7 +92,6 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
 // 交集
 const intersection  = (arr1, arr2) => {
   return arr1.filter(v => arr2.includes(v))
@@ -110,15 +114,12 @@ export default {
       selectedParams:[]
     };
   },
-  props: ['instructCode', 'equipmentCompany', 'equipmentType','params'],
+  props: ['instructCode', 'instructType','params','equipmentVersion'],
   computed: {
-    ...mapGetters({
-      instructTypeObj: 'dict/instructTypeObj'
-    }),
     supportVersions() {
       let params = this.selectedParams
       if(!params.length) {
-        return []
+        return this.equipmentVersion.split(',')
       }
       let midArr = [], arr=[]
       params.forEach((item,index) => {
@@ -129,10 +130,6 @@ export default {
         }
       })
       return arr
-    },
-    instructType() { // 指令编辑类型
-      return this.instructTypeObj[this.equipmentCompany+this.equipmentType]?
-      this.instructTypeObj[this.equipmentCompany+this.equipmentType]:'1'
     },
     filterCode() {
       let code = this.instructCode
@@ -209,6 +206,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.no-data {
+  text-align: center;
+  color:#ccc;
+}
 .input-model
   padding: 20px 30px;
   .part1

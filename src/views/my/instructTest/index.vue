@@ -94,8 +94,8 @@
           >
             <input-model
               :instruct-code="instructCode"
-              :equipment-company="equipmentCompany"
-              :equipment-type="equipmentType"
+              :instruct-type="instructType"
+              :equipment-version="equipmentVersion"
               :params="params"
             ></input-model>
           </el-tab-pane>
@@ -146,7 +146,7 @@
             name="运行结果"
           >
             <div v-loading="loadingResult">
-               <run-result :id="modelId" :run-result="runResult"></run-result>
+               <run-result :type="0" :id="modelId" :run-result="runResult"></run-result>
             </div>
           </el-tab-pane>
           <el-tab-pane
@@ -154,20 +154,43 @@
             name="示例报文"
           >
             <pre>
-              {{examMsg}}
+              {{examMsg?examMsg:'暂无示例报文'}}
             </pre>
           </el-tab-pane>
           <el-tab-pane
             label="示例运行结果"
             name="示例运行结果"
           >
-            <p style="color:red">示例运行结果</p>
+            <run-result :type="1" :id="modelId" :run-result="runResult"></run-result>
           </el-tab-pane>
           <el-tab-pane
-            label="属性"
-            name="属性"
+            label="基础属性"
+            name="基础属性"
+            class="property"
           >
-            <p style="color:red">属性</p>
+            <p>
+              <b>模板名称：</b>
+              <span>
+                {{modelProperty.analysisZh}}
+              </span>
+            </p>
+             <p>
+              <b>模板说明：</b>
+              <span>
+                {{modelProperty.analysisDescribe}}
+              </span>
+            </p>
+            <p>
+              <b>指令预览(原)：</b>
+              <span v-if="instructType==2">{{filterCode}} {{instructStr}}</span>
+              <span v-if="instructType==1">{{filterCode2}} {{instructStr2}}</span>
+            </p>
+            <p>
+              <b>适用设备版本(全)：</b>
+              <span>
+                {{equipmentVersion}}
+              </span>
+            </p>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -184,6 +207,7 @@ import sampleResult from "./components/sampleResult.vue";
 import paramIntro from "./components/paramIntro.vue";
 import versionHistory from "./components/versionHistory.vue";
 import codeEdit from "./components/codeEdit.vue";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -220,6 +244,9 @@ export default {
       runResult: {} ,// 运行结果
       examMsg: '', // 示例报文
       examResult: '', //示例结果
+      modelProperty: {},  // 模板属性
+      equipmentVersion: '' , //指令适用设备版本
+      instructParameter: [], // 指令模板自带参数
     };
   },
   created() {
@@ -233,6 +260,53 @@ export default {
       this.modelId = modelId;
       this.getNetDeviceListByTypeId(modelId);
       this.getModelData(modelId);
+    }
+  },
+  computed: {
+     ...mapGetters({
+      instructTypeObj: 'dict/instructTypeObj'
+    }),
+    instructType() { // 指令编辑类型
+      return this.instructTypeObj[this.equipmentCompany+this.equipmentType]?
+      this.instructTypeObj[this.equipmentCompany+this.equipmentType]:'1'
+    },
+    filterCode() {
+      let code = this.instructCode
+      if(code) {
+        if(!this.instructStr) {
+          return code.replace(/:/g, '').replace(/;/g, '') + ':;'
+        }else {
+          return code.replace(/:/g, '').replace(/;/g, '') + ':'
+        }
+      }else {
+        return ''
+      }
+
+    },
+    filterCode2() {
+      let code = this.instructCode
+      if(code) {
+        return code.replace( /\$\{(.*?)\}/g,'').replace(/:/g, '').replace(/;/g, '')
+      }
+    },
+    instructStr2() {
+      let str = "";
+      let ffarr = this.instructParameter.filter(elem => elem.paramValue);
+      return ffarr.reduce((last,cur) => {
+        return last + cur.paramValue + ' '
+      },'')
+    },
+    instructStr() {
+      let str = "";
+      let ffarr = this.instructParameter.filter(elem => elem.paramValue);
+      ffarr.forEach((ff, index) => {
+        if (index < ffarr.length - 1) {
+          str += `${ff.parameterCode}=${ff.paramValue},`;
+        } else {
+          str += `${ff.parameterCode}=${ff.paramValue};`;
+        }
+      });
+      return str;
     }
   },
   mounted() {
@@ -277,7 +351,6 @@ export default {
         }
       );
       this.loading = false;
-      console.log(res);
       if (res.status == "fail") {
         alert(`${res.msg}`);
       } else {
@@ -313,15 +386,21 @@ export default {
         });
       }
     },
-    async getModelData(id) {
+    async getModelData(id) { // 获取指令模板信息
       let res = await this.$http.get(
         `/OpsDev/orderAnalysis/getOrderAnalysisById`,
         {
           params: { id }
         }
       );
+      console.log(res)
       if (res) {
-        let { analysisCode } = res;
+        let { analysisCode, analysisDescribe,analysisVersion,analysisZh,orderCode} = res;
+        this.instructCode = orderCode
+        this.modelProperty = {analysisDescribe,analysisVersion,analysisZh}
+        if(res.instructParameter){
+            this.instructParameter = JSON.parse(res.instructParameter)
+          }
         this.code = analysisCode
           ? analysisCode
           : "# -*- coding: UTF-8 -*- \n#请在此方法下面编写您的代码 \ndef proc(ne,fb):";
@@ -340,11 +419,13 @@ export default {
         instructCode,
         equipmentCompany,
         equipmentType,
-        orderParameterList
+        orderParameterList,
+        equipmentVersion
       } = res;
       this.instructCode = instructCode;
       this.equipmentCompany = equipmentCompany;
       this.equipmentType = equipmentType;
+      this.equipmentVersion = equipmentVersion //指令支持的全部版本
       this.params = orderParameterList.length
         ? orderParameterList.map(item => {
             return {
@@ -408,7 +489,6 @@ export default {
         },
         config
       );
-      console.log(res)
       this.loadingResult = false
       if(res.status=='success') {
         this.$message.success('执行成功')
@@ -559,7 +639,6 @@ export default {
     height: 34px;
     padding: 0 14px;
     background: rgba(242, 242, 242, 1);
-
     .el-button {
       margin-left: 8px;
     }
@@ -578,6 +657,12 @@ export default {
         color: #409eff;
       }
     }
+  }
+}
+.property {
+  font-size 12px;
+  p {
+    margin: 6px 0
   }
 }
 </style>

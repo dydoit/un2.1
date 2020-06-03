@@ -10,6 +10,11 @@
         <td>适用版本</td>
       </tr>
     </thead>
+    <tbody v-if="!params.length">
+      <tr class="no-data">
+        <td colspan="6">暂无参数</td>
+      </tr>
+    </tbody>
     <tbody>
       <tr
         v-for="(item,index) of params"
@@ -58,6 +63,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.no-data {
+  text-align: center;
+  color:#ccc;
+}
 table {
   width: 100%;
   text-align: center;

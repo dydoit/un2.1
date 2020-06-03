@@ -9,7 +9,7 @@
         <el-radio-button :label="true">table展示</el-radio-button>
         <el-radio-button :label="false">json展示</el-radio-button>
       </el-radio-group>
-      <el-button size="mini" @click="setExam">设为示例</el-button>
+      <el-button size="mini" @click="setExam" v-show="type===0">设为示例</el-button>
     </div>
     <div>
       <table v-show="isTable">
@@ -54,6 +54,9 @@ export default {
     },
     runResult: {
       type: Object
+    },
+    type: {
+      type:Number
     }
   },
   data() {
