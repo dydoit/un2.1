@@ -63,7 +63,7 @@
         :data="allData"
         border
         size="small">
-        <el-table-column align="center" prop="equipmentCity" label="所属分公司" ></el-table-column>
+        <el-table-column align="center" prop="equipmentCity" label="所属分公司" width="120" show-overflow-tooltip></el-table-column>
         <el-table-column align="center" prop="profession" label="所属专业" width="100"></el-table-column>
         <el-table-column align="center" label="所属设备" width="80">
           <template slot-scope="scope">
@@ -86,7 +86,7 @@
             {{scope.row.drivingState}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="操作" width="130">
+        <el-table-column align="center" label="操作" width="170">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -98,6 +98,11 @@
               type="text"
               @click="edit(scope.row)"
               v-permission="10010104">修改</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              class="danger"
+              @click="goError(scope.row)" v-if="scope.row.addWay != 0">报错</el-button>
             <el-button
               size="mini"
               type="text"
@@ -241,15 +246,18 @@ export default {
     },
     //新增
     add(){
-      this.$router.push({path:'/network/networkAdd', query:{pageType:1}})
+      this.$router.push({path:'/home/network/networkAdd', query:{pageType:1}})
     },
     //编辑
     edit(item){
-      this.$router.push({path:'/network/networkAdd',query:{pageType:2,id:item.id}})
+      this.$router.push({path:'/home/network/networkAdd',query:{pageType:2,id:item.id}})
+    },
+    goError(item){
+      this.$router.push({path:'/home/network/networkError',query:{id:item.id}})
     },
     //详情
     details(item){
-      this.$router.push({path:'/network/networkDetail',query:{id:item.id}})
+      this.$router.push({path:'/home/network/networkDetail',query:{id:item.id}})
     },
     //删除
     del(item){
