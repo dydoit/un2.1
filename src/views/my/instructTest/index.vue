@@ -44,6 +44,7 @@
         <i
           class="iconfont icon-fabu"
           title="发布"
+          @click="handlePublish"
         ></i>
         <el-cascader
           placeholder="配置运行网元"
@@ -57,7 +58,7 @@
           round
           title="非智能运行模式时需要先配置网元"
           :disabled="loading"
-          @click="getOrderMessage"
+          @click="handleGetMessage"
         >获取报文</el-button>
         <i
           class="iconfont icon-yunhang"
@@ -88,6 +89,7 @@
             name="second"
           >
             <output-model
+            ref="output"
             :output-model-name="outputModelName"
             :output-model-detail-list="outputModelDetailList"
             @outChange="handleChangeOutput"
@@ -98,6 +100,7 @@
             name="third"
           >
             <input-model
+              ref="input"
               :instruct-code="instructCode"
               :instruct-type="instructType"
               :equipment-version="equipmentVersion"
@@ -114,14 +117,14 @@
             label="历史版本"
             name="fifth"
           >
-            <version-history></version-history>
+            <version-history :list="versionList" @getVersionId="getVersionId"></version-history>
           </el-tab-pane>
           <el-tab-pane
             label="查看"
             name="six"
             v-if="versionId"
           >
-            查看
+            <code-contrast :list="versionList" :id="versionId" :current-code="code"></code-contrast>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -187,8 +190,8 @@
             </p>
             <p>
               <b>指令预览(原)：</b>
-              <span v-if="instructType==2">{{filterCode}} {{instructStr}}</span>
-              <span v-if="instructType==1">{{filterCode2}} {{instructStr2}}</span>
+              <span v-if="instructType==2">{{filterCode}}</span>
+              <span v-if="instructType==1">{{filterCode2}}</span>
             </p>
             <p>
               <b>适用设备版本(全)：</b>
@@ -200,6 +203,28 @@
         </el-tabs>
       </div>
     </div>
+    <el-dialog
+    title="提示"
+    :visible.sync="dialogVisible"
+    width="40%"
+    >
+      <el-form :model="publishData" label-width="80px" size="small">
+        <el-form-item label="版本号" required>
+          <el-input v-model="publishData.versionNum"></el-input>
+        </el-form-item>
+        <el-form-item label="版本描述" required>
+          <el-input type="textarea" v-model="publishData.versionDescribe"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="btn-group">
+        <el-button type="primary" @click="publish">
+          发布
+        </el-button>
+        <el-button @click="dialogVisible=false">
+          取消
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -212,11 +237,18 @@ import sampleResult from "./components/sampleResult.vue";
 import paramIntro from "./components/paramIntro.vue";
 import versionHistory from "./components/versionHistory.vue";
 import codeEdit from "./components/codeEdit.vue";
+import codeContrast from './components/codeContrast.vue'
 import { mapGetters } from "vuex";
+import moment from "moment";
 export default {
   data() {
     return {
-      runMode: "",
+      dialogVisible: false,
+      publishData: {
+        versionNum: '', //版本号
+        versionDescribe: '' // 版本描述
+      },
+      runMode: "智能运行",
       options: [
         {
           label: "智能运行",
@@ -251,9 +283,9 @@ export default {
       examResult: '', //示例结果
       modelProperty: {},  // 模板属性
       equipmentVersion: '' , //指令适用设备版本
-      instructParameter: [], // 指令模板自带参数,输入模型
       outputModelName: '', //输出模型名字
       outputModelDetailList: [], // 输出模型出参详情数组
+      versionList:[], //历史版本
     };
   },
   created() {
@@ -267,6 +299,7 @@ export default {
       this.modelId = modelId;
       this.getNetDeviceListByTypeId(modelId);
       this.getModelData(modelId);
+      this.getHistoryList(modelId)
     }
   },
   computed: {
@@ -295,25 +328,6 @@ export default {
       if(code) {
         return code.replace( /\$\{(.*?)\}/g,'').replace(/:/g, '').replace(/;/g, '')
       }
-    },
-    instructStr2() {
-      let str = "";
-      let ffarr = this.instructParameter.filter(elem => elem.paramValue);
-      return ffarr.reduce((last,cur) => {
-        return last + cur.paramValue + ' '
-      },'')
-    },
-    instructStr() {
-      let str = "";
-      let ffarr = this.instructParameter.filter(elem => elem.paramValue);
-      ffarr.forEach((ff, index) => {
-        if (index < ffarr.length - 1) {
-          str += `${ff.parameterCode}=${ff.paramValue},`;
-        } else {
-          str += `${ff.parameterCode}=${ff.paramValue};`;
-        }
-      });
-      return str;
     }
   },
   mounted() {
@@ -328,6 +342,18 @@ export default {
     };
   },
   methods: {
+     async getHistoryList(id) {
+        let res = await this.$http.get('/OpsDev/orderAnalysisHistory/getOrderAnalysisHistoryList', {
+          params:{
+            id
+          }
+        })
+        this.versionList = res.list
+    },
+    getVersionId(id) {
+      this.versionId = id
+      this.activeName = 'six'
+    },
     handleChangeOutput({name, params}) {
       this.outputModelName = name
       this.outputModelDetailList = params
@@ -350,14 +376,27 @@ export default {
     handleCodeChange(code) {
       this.code = code;
     },
-    async getOrderMessage() { //获取报文
+    handleGetMessage() {
+      if(this.runMode=='智能运行')  {
+        let netTd = this.netData[0].children[0].value
+        console.log(netTd)
+        this.getOrderMessage(netTd)
+      }else {
+        this.getOrderMessage(this.netTd)
+      }
+    },
+    async getOrderMessage(id) { //获取报文
+      if(!id) {
+        this.$message.error('网元不能为空')
+        return
+      }
       this.loading = true;
       let res = await this.$http.get(
         "/OpsDev/orderAnalysis/testOrderAnalysis",
         {
           params: {
             id: this.modelId,
-            netId: this.netId
+            netId: id
           }
         }
       );
@@ -379,7 +418,6 @@ export default {
         }
       );
       if (res) {
-        this.netId = res[0].networkDeviceResult[0].id;
         this.netData = res.map(item => {
           return {
             label: item.version,
@@ -406,12 +444,13 @@ export default {
       );
       console.log(res)
       if (res) {
-        let { analysisCode, analysisDescribe,analysisVersion,analysisZh,orderCode} = res;
+        let { analysisCode, analysisDescribe,analysisVersion,analysisZh,orderCode,orderAnalysisOutputModelDto} = res;
         this.instructCode = orderCode
         this.modelProperty = {analysisDescribe,analysisVersion,analysisZh}
-        if(res.instructParameter){
-            this.instructParameter = JSON.parse(res.instructParameter)
-          }
+        if(orderAnalysisOutputModelDto) {
+          this.outputModelName = orderAnalysisOutputModelDto.modelName
+          this.outputModelDetailList = orderAnalysisOutputModelDto.orderAnalysisOutputModelDetailsList
+        }
         this.code = analysisCode
           ? analysisCode
           : "# -*- coding: UTF-8 -*- \n#请在此方法下面编写您的代码 \ndef proc(ne,fb):";
@@ -524,26 +563,53 @@ export default {
     },
     handleChangeTab() {},
     async save  () { // 保存
+      let params = this.$refs.input.selectedParams.map(item => {
+        return {
+          paramKey: item.parameterCode,
+          paramValue: item.paramValue,
+          paramKeyZh: item.parameterZh,
+          paramNotNull: item.paramNotNull - 0,
+          checkType: item.checkType, //检验方式
+          paramExtent: "", //参数范围
+        }
+      })
       let res = await this.$http.post('/OpsDev/orderAnalysis/saveAllOrderAnalysis', {
         id: this.modelId,
         analysisCodeDev: this.code,
-        instructParameter: '[]',
+        instructParameter: JSON.stringify(params),
         orderAnalysisOutputModelDto: {
-          modelName: this.outputModelName,
+          modelName: this.$refs.output.outputData.modelName,
           orderAnalysisId: this.modelId,
-          orderAnalysisOutputModelDetailsList: this.outputModelDetailList.length
-          ?this.outputModelDetailList.map(param => {
+          orderAnalysisOutputModelDetailsList: this.$refs.output.params.length
+          ?this.$refs.output.params.map(param => {
             return {
               ...param,
               modelId: this.modelId
             }
           }): []
-        }
+        },
+        equipmentVersion: this.$refs.input.supportVersions.join(',')
       })
-      console.log(res)
+      if(res.status == 'success') {
+        this.$message.success('保存成功')
+      }
+    },
+    handlePublish() {
+      this.dialogVisible = true
+      this.publishData.versionNum = moment().format("YYYY-MM-DD HH:mm:ss")
     },
     async publish() { // 发布
-
+      let res = await this.$http.get('/OpsDev/orderAnalysisHistory/releaseOrderAnalysisHistory', {
+        params: {
+          orderAnalysisId: this.modelId,
+          analysisCode: this.code,
+          ...this.publishData
+        }
+      })
+      if(res.status=='success') {
+        this.$message.success('发布成功')
+        this.dialogVisible = false
+      }
     }
   },
   components: {
@@ -553,7 +619,8 @@ export default {
     sampleResult,
     paramIntro,
     versionHistory,
-    codeEdit
+    codeEdit,
+    codeContrast
   }
 };
 </script>
@@ -697,5 +764,9 @@ export default {
   p {
     margin: 6px 0
   }
+}
+.btn-group {
+  margin-top:40px;
+  text-align: center;
 }
 </style>

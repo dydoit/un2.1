@@ -85,10 +85,6 @@
   import Storage from './storage.vue'
   export default {
     props:['outputModelName', 'outputModelDetailList'],
-    mounted() {
-      this.outputData.modelName = this.outputModelName
-      this.params = this.outputModelDetailList.slice()
-    },
     data() {
       return {
         outputData: {
@@ -100,11 +96,11 @@
       }
     },
     watch: {
-      'outputData.modelName'() {
-        this.handleChange()
+      outputModelName(newVal) {
+        this.outputData.modelName = newVal
       },
-      params() {
-        this.handleChange()
+      outputModelDetailList(arr) {
+        this.params = arr.slice()
       }
     },
     methods: {
@@ -140,12 +136,6 @@
       },
       copyParams(parmas) {
         this.params = parmas.slice()
-      },
-      handleChange() {
-        this.$emit('outChange', {
-          name:this.outputData.modelName,
-          params: this.params
-        })
       }
     },
     components: {

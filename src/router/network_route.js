@@ -41,6 +41,15 @@ export default [
           parentPath: '/home/network',
           parentName: '网元管理',
         }
+      },
+      {
+        path: 'networkError',
+        component: () => import('@/views/network/networkError.vue'),
+        meta: {
+          name: '网元报错',
+          parentPath: '/home/network',
+          parentName: '网元管理',
+        }
       }
     ]
   },

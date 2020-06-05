@@ -25,28 +25,14 @@
 
 <script>
   export default {
+    props: ['list'],
     data() {
       return {
-        list: [
-
-        ]
       }
     },
-    created() {
-      this.getHistoryList()
-    },
     methods: {
-      async getHistoryList() {
-        let res = await this.$http.get('/OpsDev/orderAnalysisHistory/getOrderAnalysisHistoryList', {
-          params:{
-            id: this.$route.query.model_id
-          }
-        })
-        console.log(res)
-        this.list = res.list
-      },
-      handleClick() {
-
+      async handleClick({id}) {
+        this.$emit('getVersionId', id)
       }
     },
   }
