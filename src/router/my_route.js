@@ -205,6 +205,15 @@ export default [
           parentName: '我的处理脚本',
           parentPath: '/home/my-data-script'
         }
+      },
+      {
+        path: 'modify',
+        component: () => import('../views/my/dataScript/modify.vue'),
+        meta: {
+          name: '脚本修改',
+          parentName: '我的处理脚本',
+          parentPath: '/home/my-data-script'
+        }
       }
     ]
   }

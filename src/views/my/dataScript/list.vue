@@ -62,7 +62,7 @@
         </div>
         <div class="btn-group">
           <el-button type="text" size="mini">查看</el-button>
-          <el-button type="text" size="mini">修改</el-button>
+          <el-button type="text" size="mini" @click="goModify(item.id)">修改</el-button>
           <el-button type="text" size="mini">删除</el-button>
         </div>
       </li>
@@ -138,9 +138,6 @@ import {mapGetters } from "vuex";
         }
         console.log(res)
       },
-      search() {
-
-      },
       handleSizeChange(val){
         this.limit = val
         this.getData()
@@ -148,6 +145,9 @@ import {mapGetters } from "vuex";
       handleCurrentChange(val){
         this.currentPage = val
         this.getData()
+      },
+      goModify(id) {
+        this.$router.push({path:'/home/my-data-script/modify', query: {parseId: id}})
       }
     },
   }
@@ -171,7 +171,11 @@ import {mapGetters } from "vuex";
       div
         display flex
         justify-content space-between
+        span
+          width 20%
+          font-size 12px
         strong
+          flex 1
           color #409EFF
       p
         color #bbb
