@@ -250,7 +250,7 @@ export default {
       });
       if (res.status == "success") {
         this.$router.push({
-          path: "/my-task/add-step",
+          path: "/home/my-task/add-step",
           query: {
             id: res.id
           }
@@ -302,7 +302,7 @@ export default {
     },
     goModifyStep  () {
       this.$router.push({
-        path: '/my-task/add-step',
+        path: '/home/my-task/add-step',
         query: {
           id: this.taskId,
           type:'modify'
@@ -356,7 +356,7 @@ export default {
     },
     seeStep() {
       this.$router.push({
-        path: '/my-task/add-step',
+        path: '/home/my-task/add-step',
         query: {
           id: this.taskId,
           type:'read'

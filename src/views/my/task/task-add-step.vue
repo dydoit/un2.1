@@ -208,7 +208,7 @@ export default {
     },
     reback() { // 返回上一步
       this.$router.push({
-          path: '/my-task/manage',
+          path: '/home/my-task/manage',
           query: {
             id: this.taskId,
             type: 'modify'

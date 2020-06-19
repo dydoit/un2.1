@@ -101,7 +101,7 @@
           })
           if(res.status =='success'){
             this.$message.success('新增成功！')
-            this.$router.push('/role-set')
+            this.$router.push('/home/role-set')
           }else if(res.status =='fail'){
             this.$message.error(res.msg)
           }
@@ -111,7 +111,7 @@
           })
           if(res.status =='success'){
             this.$message.success('修改成功！')
-            this.$router.push('/role-set')
+            this.$router.push('/home/role-set')
           }else if(res.status =='fail'){
             this.$message.error(res.msg)
           }
@@ -151,7 +151,7 @@
         this.loading = false;
       },
       goback(){
-        this.$router.push('/role-set')
+        this.$router.push('/home/role-set')
       },
     },
     mounted(){

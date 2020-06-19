@@ -8,7 +8,7 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b">
-      <el-menu-item index="/network" v-if="handleShow(1001)">网元管理</el-menu-item>
+      <el-menu-item index="/home/network" v-if="handleShow(1001)">网元管理</el-menu-item>
       <el-submenu index="/my" v-if="handleShow(1003)">
         <template slot="title">我的</template>
         <el-menu-item index="/home/my-instruction" v-if="handleShow(100301)">
@@ -20,15 +20,25 @@
         <el-menu-item index="/home/my-task-temp" v-if="handleShow(100302)">
          我的任务模板
         </el-menu-item>
+        <el-menu-item index="/home/my-data-script" v-if="handleShow(100302)">
+          我的处理脚本
+        </el-menu-item>
         <el-menu-item index="/home/my-task" v-if="handleShow(100304)">
          我的任务
         </el-menu-item>
       </el-submenu>
       <el-submenu index="/setup" v-if="handleShow(1004)">
         <template slot="title">系统设置</template>
-        <el-menu-item index="/role-set" v-if="user.roleid==1">角色管理</el-menu-item>
-        <el-menu-item index="/member-set" v-if="handleShow(100402)">用户管理</el-menu-item>
-        <el-menu-item index="/log-set" v-if="handleShow(100403)">日志管理</el-menu-item>
+        <el-menu-item index="/home/role-set" v-if="user.roleid==1">角色管理</el-menu-item>
+        <el-menu-item index="/home/member-set" v-if="handleShow(100402)">用户管理</el-menu-item>
+        <el-menu-item index="/home/log-set" v-if="handleShow(100403)">日志管理</el-menu-item>
+        <!-- <el-menu-item index="/dict-set">字典项</el-menu-item> -->
+      </el-submenu>
+      <el-submenu index="/service">
+        <template slot="title">开发者服务</template>
+        <el-menu-item index="/home/service/notebook">开发手册</el-menu-item>
+        <el-menu-item index="/home/service/list">应用接口</el-menu-item>
+        <el-menu-item index="/home/service/manage">应用接口管理</el-menu-item>
         <!-- <el-menu-item index="/dict-set">字典项</el-menu-item> -->
       </el-submenu>
     </el-menu>

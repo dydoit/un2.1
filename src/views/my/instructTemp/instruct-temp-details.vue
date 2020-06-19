@@ -73,9 +73,9 @@ export default {
             equipmentTypeArr: 'equipmentTypeArr',
             instructTypeObj: 'dict/instructTypeObj'
         }),
-        
+
         //指令预览处理
-        filterCode() { 
+        filterCode() {
             return this.instructDetails.orderCode
         },
         //指令预览处理
@@ -99,7 +99,7 @@ export default {
             }
         },
         //指令预览处理
-        filterParameter2() {    
+        filterParameter2() {
             let str = "";
             let ffarr = this.instructDetails.instructParameter.filter(elem => elem.paramValue);
             return ffarr.reduce((last,cur) => {
@@ -110,7 +110,7 @@ export default {
     methods:{
         //返回
         goback(){
-            this.$router.push('/my-instruction-temp')
+            this.$router.push('/home/my-instruction-temp')
         },
         //获取模板详情数据
         async getData(){
@@ -138,7 +138,7 @@ export default {
                     instructDescribe:res.instructDescribe,
                     instructCode:res.instructCode,
             }
-            
+
         },
         //
         getInstructType() { // 指令编辑类型

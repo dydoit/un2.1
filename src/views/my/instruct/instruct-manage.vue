@@ -304,7 +304,7 @@
         <p>
           <el-checkbox v-model="isRead">
             同意并详细阅读<span
-            
+
             @click="showAgreement"
             >&lt;&lt;责任说明&gt;&gt;</span>
           </el-checkbox>
@@ -702,7 +702,7 @@ export default {
           type: "success",
           message: "新增指令成功"
         });
-        this.$router.push("/my-instruction/list");
+        this.$router.push("/home/my-instruction/list");
       } else {
         this.$message.error(`${res.msg}`);
       }
@@ -737,7 +737,7 @@ export default {
           type: "success",
           message: "指令修改成功"
         });
-        this.$router.push("/my-instruction/list");
+        this.$router.push("/home/my-instruction/list");
       }else {
         this.$message.error(`${res.msg}`)
         return

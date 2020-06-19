@@ -171,5 +171,41 @@ export default [
         }
       }
     ]
+  },
+   {// 我的数据处理脚本
+    path:'my-data-script',
+    component:() =>import('@/components/layout/content.vue'),
+    children: [
+      {
+        path: '',
+        redirect: 'list'
+      },
+      {
+        path: 'list',
+        component:() =>import('../views/my/dataScript/list.vue'),
+        meta: {
+          name: '我的数据处理脚本',
+          parentPath: '/home/my-data-script'
+        }
+      },
+      {
+        path: 'add',
+        component: () => import('../views/my/dataScript/add.vue'),
+        meta: {
+          name: '新增脚本',
+          parentPath: '/home/my-data-script',
+          parentName: '我的处理脚本'
+        }
+      },
+      {
+        path: 'detail',
+        component: () => import('../views/my/dataScript/detail.vue'),
+        meta: {
+          name: '脚本详情',
+          parentName: '我的处理脚本',
+          parentPath: '/home/my-data-script'
+        }
+      }
+    ]
   }
 ]

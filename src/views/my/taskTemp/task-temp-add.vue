@@ -138,7 +138,7 @@ import {mapGetters } from "vuex";
       goDrag() {
         if(this.pageType == 3) {
           this.$router.push({
-            path: '/my-task-temp/temp-drag',
+            path: '/home/my-task-temp/temp-drag',
             query: {
               id: this.taskTemplateId,
               from: 'detail'
@@ -146,7 +146,7 @@ import {mapGetters } from "vuex";
           })
         }else {
           this.$router.push({
-            path: '/my-task-temp/temp-drag',
+            path: '/home/my-task-temp/temp-drag',
             query: {
               id: this.taskTemplateId
             }
@@ -162,7 +162,7 @@ import {mapGetters } from "vuex";
         if(res.status=='success'){
           this.taskTemplateId = res.id
           this.$message.success('保存成功')
-          this.$router.replace({path:'/my-task-temp/temp-manage', query:{pageType:'2',id:res.id}})
+          this.$router.replace({path:'/home/my-task-temp/temp-manage', query:{pageType:'2',id:res.id}})
           this.isSave = true
         }else if(res.status=='fail'){
           this.$message.error(res.msg)
@@ -179,7 +179,7 @@ import {mapGetters } from "vuex";
         if(res.status=='success'){
           this.taskTemplateId = res.id
           this.$message.success('保存成功')
-          this.$router.replace({path:'/my-task-temp/temp-manage', query:{pageType:'2',id:res.id}})
+          this.$router.replace({path:'/home/my-task-temp/temp-manage', query:{pageType:'2',id:res.id}})
           this.isSave = true
         }else if(res.status=='fail'){
           this.$message.error(res.msg)

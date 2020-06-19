@@ -26,7 +26,7 @@
       <el-button class="btn-search" icon="el-icon-search" size="small" type="primary" @click="getData(1)">搜索</el-button>
     </el-form>
     <p class="add-p-wrapper">
-      <el-button type="primary" icon="el-icon-plus" size="small" @click="$router.push('/my-instruction/instruct-manage')" v-permission="10030101">新增指令</el-button>
+      <el-button type="primary" icon="el-icon-plus" size="small" @click="$router.push('/home/my-instruction/instruct-manage')" v-permission="10030101">新增指令</el-button>
     </p>
     <div class="content">
       <div v-show="!tableData.length" class="no-data">
@@ -166,7 +166,7 @@
         })
       },
       goDetail({id}) {
-          this.$router.push({path: '/my-instruction/detail', query: {
+          this.$router.push({path: '/home/my-instruction/detail', query: {
             id
           }})
       },

@@ -11,21 +11,21 @@
                     :key="index"
                     :class="{cur:selectform.equipmentCompany == item.dictValue}" @click="handleTabs1(item)">{{item.dictNameZh}}</span>
                   </div>
-                </div> 
+                </div>
                 <div class="item">
                   <div class="label">设备类型:</div>
                   <div class="sp">
-                    <span v-for="(item,index) in equipmentTypeArr" 
-                    :key="index" 
-                    :class="{cur:selectform.equipmentType == item.dictValue}" @click="handleTabs2(item)">{{item.dictNameZh}}</span> 
+                    <span v-for="(item,index) in equipmentTypeArr"
+                    :key="index"
+                    :class="{cur:selectform.equipmentType == item.dictValue}" @click="handleTabs2(item)">{{item.dictNameZh}}</span>
                     </div>
-                </div> 
+                </div>
                 <div class="item">
                   <div class="label">版本号:</div>
                   <div class="sp">
-                    <span  v-for="(item,index) in equipmentVersionArr" 
-                    :key="index" 
-                    :class="{cur:selectform.equipmentVersion == item.version}" @click="handleTabs3(item)">{{item.version}}</span> 
+                    <span  v-for="(item,index) in equipmentVersionArr"
+                    :key="index"
+                    :class="{cur:selectform.equipmentVersion == item.version}" @click="handleTabs3(item)">{{item.version}}</span>
                   </div>
                 </div>
                 <div class="item">
@@ -44,7 +44,7 @@
                           :value="item.id"></el-option>
                     </el-select>
                   </div>
-                </div>                
+                </div>
           </div>
           <div class="form-row2">
             <el-form-item label="指令:" v-if="pageType=='0'||pageType=='2'">
@@ -265,7 +265,7 @@ export default {
         instructTypeObj: 'dict/instructTypeObj'
       }),
       //指令预览处理
-      filterCode() { 
+      filterCode() {
         return this.instructCode
       },
       //指令预览处理
@@ -289,7 +289,7 @@ export default {
         }
       },
       //指令预览处理
-      filterParameter2() {    
+      filterParameter2() {
         let str = "";
         let ffarr = this.dataform.instructParameter.filter(elem => elem.paramValue);
         return ffarr.reduce((last,cur) => {
@@ -313,10 +313,10 @@ export default {
     },
     handleTabs3(item,index){
       this.selectform.equipmentVersion = item.version
-      this.dataform.instruId = ''    
+      this.dataform.instruId = ''
     },
     //
-    getInstructType() { 
+    getInstructType() {
       console.log('this.dataform',this.dataform)
       this.instructType = this.instructTypeObj[this.dataform.equipmentCompany+this.dataform.equipmentType]?
       this.instructTypeObj[this.dataform.equipmentCompany+this.dataform.equipmentType]:'1'
@@ -336,7 +336,7 @@ export default {
     },
     //下一步，解析h指令
     toNext() {
-      this.$router.push({path:'/my-instruction-temp/parsing',query:{pageType: 2,id:this.instructTempId}})
+      this.$router.push({path:'/home/my-instruction-temp/parsing',query:{pageType: 2,id:this.instructTempId}})
     },
     //显示责任协议书
     showAgreement() {
@@ -350,6 +350,7 @@ export default {
           netType:this.selectform.equipmentType
         }
       })
+      console.log(res)
       this.equipmentVersionArr = res
     },
     //获取指令下拉数据
@@ -509,7 +510,7 @@ export default {
         }
       })
     },
-    
+
     //判断是否新增页面、修改页面、查看详情页面
     getParam(){
       this.pageType = this.$route.query.pageType;
@@ -544,9 +545,9 @@ export default {
           }
           this.getInstructType();
         }
-        
+
       }
-    },   
+    },
   },
   mounted() {
     this.getParam();

@@ -1,0 +1,31 @@
+.cm-s-leetcode.CodeMirror { color: #000000; background: #FFFFFF; }
+.cm-s-leetcode span.cm-meta {color: rgb(7, 32, 170);}
+.cm-s-leetcode span.cm-keyword {
+    color: #708;
+    font-weight: bold; }
+.cm-s-leetcode span.cm-atom {color: rgb(88, 92, 246);}
+.cm-s-leetcode span.cm-number {color: #080;}
+.cm-s-leetcode span.cm-def {color: rgb(16, 51, 246);}
+.cm-s-leetcode span.cm-variable {color: black;}
+.cm-s-leetcode span.cm-variable-2 {color: rgb(183, 125, 18);}
+.cm-s-leetcode span.cm-variable-3 {color: rgb(16, 51, 246);}
+.cm-s-leetcode span.cm-property {color: black;}
+.cm-s-leetcode span.cm-operator {   color: #AA22FF;   font-weight: bold;}
+.cm-s-leetcode span.cm-comment {  color: #a50;   font-style: italic;}
+.cm-s-leetcode span.cm-string {color: #BA2121;}
+.cm-s-leetcode span.cm-string-2 {color: rgb(193, 52, 32);}
+.cm-s-leetcode span.cm-error {color: #F00;}
+.cm-s-leetcode span.cm-qualifier {color: #555;}
+
+.cm-s-leetcode span.cm-builtin{color: #008000;}
+
+
+
+.CodeMirror-gutters{
+    border-right-color: #eeeeee;
+    background: #fff;
+}
+
+.CodeMirror{
+    font-family: 'Menlo','Ubuntu Mono','Consolas','source-code-pro',monospace;
+}

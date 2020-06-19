@@ -194,19 +194,19 @@ import {dateFormat} from '@/utiles/dateFormat.js'
       },
       //创建新的
       addOthder(item){
-        this.$router.push({path:'/my-instruction-temp/temp-manage', query:{pageType:'0',id:item.id}})
+        this.$router.push({path:'/home/my-instruction-temp/temp-manage', query:{pageType:'0',id:item.id}})
       },
       //新增
       add(){
-        this.$router.push({path:'/my-instruction-temp/temp-manage', query:{pageType:'1'}})
+        this.$router.push({path:'/home/my-instruction-temp/temp-manage', query:{pageType:'1'}})
       },
       //修改
       edit(item){
-        this.$router.push({path:'/my-instruction-temp/temp-manage', query:{pageType:'2',id:item.id}})
+        this.$router.push({path:'/home/my-instruction-temp/temp-manage', query:{pageType:'2',id:item.id}})
       },
       //查看详情
       details(item){
-        this.$router.push({path:'/my-instruction-temp/temp-details', query:{pageType:'3',id:item.id}})
+        this.$router.push({path:'/home/my-instruction-temp/temp-details', query:{pageType:'3',id:item.id}})
       },
       //根据搜索条件进行搜索
       searchFun(){
@@ -281,7 +281,7 @@ import {dateFormat} from '@/utiles/dateFormat.js'
 >>>.el-table__row{
   &:hover{
     cursor pointer
-    
+
   }
   &.expanded{
         background: #f1f4f9;

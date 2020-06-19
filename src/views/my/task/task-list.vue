@@ -25,7 +25,7 @@
         <el-button size="mini" @click="taskStart" v-permission="10030407">启动</el-button>
         <el-button size="mini" @click="taskDisable" v-permission="10030406">禁用</el-button>
         <el-button size="mini" @click="handleRun" v-permission="10030412">执行</el-button>
-        <el-button size="mini" icon="el-icon-circle-plus-outline" @click="$router.push('/my-task/manage')" type="primary" v-permission="10030401">新增</el-button>
+        <el-button size="mini" icon="el-icon-circle-plus-outline" @click="$router.push('/home/my-task/manage')" type="primary" v-permission="10030401">新增</el-button>
       </div>
     </div>
     <el-table
@@ -271,7 +271,7 @@
       },
       handleDetail({id}){
         this.$router.push({
-          path: '/my-task/manage',
+          path: '/home/my-task/manage',
           query: {
             id,
             type: 'read'
@@ -283,7 +283,7 @@
       },
       handleModify({id}){
         this.$router.push({
-          path: '/my-task/manage',
+          path: '/home/my-task/manage',
           query: {
             id,
             type: 'modify'

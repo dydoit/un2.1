@@ -178,7 +178,7 @@ export default {
     methods:{
         //返回列表
         goback(){
-            this.$router.push('/my-instruction-temp')
+            this.$router.push('/home/my-instruction-temp')
         },
         //tab切换
         tabfun(index) {
@@ -276,7 +276,7 @@ export default {
         },
         //返回上一页
         returnBack(){
-            this.$router.push({path:'/my-instruction-temp/temp-manage',query:{pageType: 2,id:this.$route.query.id}})
+            this.$router.push({path:'/home/my-instruction-temp/temp-manage',query:{pageType: 2,id:this.$route.query.id}})
         },
         //保存
         async save(){

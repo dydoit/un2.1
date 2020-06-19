@@ -225,7 +225,7 @@ export default {
 
     },
     back() {
-      this.$router.push('/my-instruction/list')
+      this.$router.push('/home/my-instruction/list')
     }
   }
 };

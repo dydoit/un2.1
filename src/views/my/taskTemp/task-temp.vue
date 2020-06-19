@@ -87,19 +87,19 @@ import {dateFormat} from '@/utiles/dateFormat.js'
       },
       //当前模板创建新的版本
       addOthder(item){
-        this.$router.push({path:'/my-task-temp/temp-manage', query:{pageType:'0',id:item.id}})
+        this.$router.push({path:'/home/my-task-temp/temp-manage', query:{pageType:'0',id:item.id}})
       },
       //新增
       add(){
-        this.$router.push({path:'/my-task-temp/temp-manage', query:{pageType:'1'}})
+        this.$router.push({path:'/home/my-task-temp/temp-manage', query:{pageType:'1'}})
       },
       //修改
       edit(item){
-        this.$router.push({path:'/my-task-temp/temp-manage', query:{pageType:'2',id:item.id}})
+        this.$router.push({path:'/home/my-task-temp/temp-manage', query:{pageType:'2',id:item.id}})
       },
       //查看详情
       details(item){
-        this.$router.push({path:'/my-task-temp/temp-manage', query:{pageType:'3',id:item.id}})
+        this.$router.push({path:'/home/my-task-temp/temp-manage', query:{pageType:'3',id:item.id}})
       },
       //删除
       del(item){

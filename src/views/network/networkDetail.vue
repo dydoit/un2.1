@@ -121,7 +121,7 @@ export default {
     methods:{
         //返回
         goback(){
-            this.$router.push('/network')
+            this.$router.push('/home/network')
         },
         //获取模板详情数据
         async getData(){
@@ -162,7 +162,7 @@ export default {
         },
         //详情
         details(item){
-            this.$router.push({path:'/network/networkChildDetail',query:{id:item.id}})
+            this.$router.push({path:'/home/network/networkChildDetail',query:{id:item.id}})
         },
     },
 

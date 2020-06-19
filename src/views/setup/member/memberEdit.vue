@@ -100,7 +100,7 @@
               .then(res =>{
                 if(res.status=='success'){
                   this.$message.success('提交成功！');
-                  this.$router.push('/member-set')
+                  this.$router.push('/home/member-set')
                 }else if(res.status=='fail'){
                   this.$message.error(res.msg)
                 }
@@ -133,7 +133,7 @@
       },
       //返回
       goback(){
-        this.$router.push('/member-set')
+        this.$router.push('/home/member-set')
       }
     },
     mounted(){
