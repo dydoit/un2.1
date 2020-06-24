@@ -45,6 +45,20 @@
           </template>
      </el-table-column>
     </el-table>
+     <!-- 分页 -->
+      <div class="pagination-wrapper" v-if="tableData.length">
+        <el-pagination
+          layout="total,sizes, prev, pager, next, jumper"
+          background
+          :page-sizes="[6, 10, 14, 18]"
+          :page-size="limit"
+          :total="total"
+          :current-page.sync="currentPage"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        >
+        </el-pagination>
+      </div>
   </div>
 </template>
 
@@ -52,6 +66,8 @@
   export default {
     data() {
       return {
+        limit:6,
+        currentPage: 1,
         tableData: [
 
         ]
@@ -62,11 +78,23 @@
     },
     methods: {
       async getData() {
-        let res = await this.$http.get('/OpsDev/appInterface/queryAppInterface')
+        let res = await this.$http.get('/OpsDev/appInterface/queryAppInterface', {
+          params:{
+            page: this.currentPage,
+            limit:this.limit
+          }
+        })
         if(res.list) {
-          let {list} = res
+          let {list, total} = res
           this.tableData = list
+          this.total = total
         }
+
+      },
+      handleSizeChange(){
+
+      },
+      handleCurrentChange() {
 
       }
     },
@@ -80,4 +108,7 @@
   > .el-button
       margin-top 50px
       margin-bottom 15px
+.pagination-wrapper
+  padding 20px 0
+  text-align right
 </style>

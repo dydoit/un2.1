@@ -52,6 +52,7 @@
         icon="el-icon-circle-plus"
         @click="add"
         v-permission="10010101" plain>新增</el-button>
+        <el-button size="small" @click="$router.push('/home/network/err-list')">我的报错</el-button>
         <!-- <el-button size="small" type="primary" plain icon="el-icon-upload" @click="showUploadbox">导入</el-button>
         <el-button size="small" type="primary" plain icon="el-icon-download">模板下载</el-button> -->
       </div>

@@ -61,9 +61,9 @@
           </p>
         </div>
         <div class="btn-group">
-          <el-button type="text" size="mini">查看</el-button>
+          <el-button type="text" size="mini" @click="goDetail(item.id)">查看</el-button>
           <el-button type="text" size="mini" @click="goModify(item.id)">修改</el-button>
-          <el-button type="text" size="mini">删除</el-button>
+          <el-button type="text" size="mini" @click="del(item.id)">删除</el-button>
         </div>
       </li>
     </ul>
@@ -136,7 +136,6 @@ import {mapGetters } from "vuex";
           this.total = res.total
           this.list = list
         }
-        console.log(res)
       },
       handleSizeChange(val){
         this.limit = val
@@ -148,6 +147,21 @@ import {mapGetters } from "vuex";
       },
       goModify(id) {
         this.$router.push({path:'/home/my-data-script/modify', query: {parseId: id}})
+      },
+      goDetail(id) {
+        this.$router.push({path:'/home/my-data-script/detail', query: {parseId: id}})
+      },
+      async del(id) {
+        let res = await this.$http.get('/OpsDev/orderDataParser/delOrderDataParser', {
+          params: {id}
+        })
+        if(res.status == 'success') {
+          this.$message.success('删除成功')
+          this.currentPage = 1
+          this.getData()
+        } else {
+          this.$message.error(`${res.msg}`)
+        }
       }
     },
   }

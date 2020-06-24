@@ -16,6 +16,15 @@ export default [
         }
       },
       {
+        path: 'err-list',
+        component: () => import('@/views/network/error-list.vue'),
+        meta:{
+          name: '网元报错',
+          parentPath: '/home/network',
+          parentName: '网元管理',
+        }
+      },
+      {
         path:'networkDetail',
         component:() => import('@/views/network/networkDetail.vue'),
         meta: {

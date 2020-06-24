@@ -27,6 +27,8 @@
     </el-form>
     <p class="add-p-wrapper">
       <el-button type="primary" icon="el-icon-plus" size="small" @click="$router.push('/home/my-instruction/instruct-manage')" v-permission="10030101">新增指令</el-button>
+      <el-button size="small" @click="$router.push('/home/my-instruction/feed-list')">我的反馈</el-button>
+      <el-button type="text" style="float:right" @click="showModel">找不到指令，反馈给开发团队</el-button>
     </p>
     <div class="content">
       <div v-show="!tableData.length" class="no-data">
@@ -61,12 +63,14 @@
         >
         </el-pagination>
       </div>
+      <feedback ref="feedback"></feedback>
     </div>
   </div>
 </template>
 
 <script>
   import {mapGetters } from "vuex";
+  import feedback from './components/feedback-model.vue'
   export default {
     name:'instructList',
     data() {
@@ -101,6 +105,9 @@
         equipComObj: 'dict/equipCompanyObj',
         roleMenuList: 'roleMenuList'
       })
+    },
+    components: {
+      feedback
     },
     watch: {
       'queryData.equipmentCompany'() {
@@ -182,6 +189,9 @@
       },
       handleCurrentChange(val){
         this.getData(val)
+      },
+      showModel() {
+        this.$refs.feedback.show()
       }
     },
   }

@@ -336,7 +336,7 @@ export default {
     },
     //下一步，解析h指令
     toNext() {
-      this.$router.push({path:'/home/my-instruction-temp/parsing',query:{pageType: 2,id:this.instructTempId}})
+      this.$router.push({path:'/my-test',query:{id: this.dataform.instruId,model_id:this.instructTempId}})
     },
     //显示责任协议书
     showAgreement() {

@@ -6,7 +6,7 @@
                 <el-step title="核对结果"></el-step>
                 <el-step title="完成"></el-step>
             </el-steps>
-        </div>    
+        </div>
         <div class="step-body">
             <div class="step1" v-if="active == 0">
                 <div class="title">1.请提交网元错误信息（勾选错误内容）</div>
@@ -29,7 +29,7 @@
                             <span :class="{'red':scope.row.auditNewValue != scope.row.auditNewValue}">
                                 {{scope.row.auditNewValue}}
                             </span>
-                        </template> 
+                        </template>
                     </el-table-column>
                     </el-table>
                 </div>
@@ -54,15 +54,15 @@
                                 <el-input size="small" v-model="form.applyContact" placeholder="请输入联系方式"></el-input>
                                 <div class="red"  v-if="applyContact">联系方式不能为空</div>
                             </div>
-                            
+
                         </span>
                     </div>
-                    
+
                 </div>
                 <div class="btn">
                     <el-button size="medium" type="primary" @click="doNetAuditUpdate">更新稽核数据结果</el-button>
                     <el-button size="medium" @click="doNetAuditSubmit" plain>系统稽核有误，提交给开发团队</el-button>
-                </div>               
+                </div>
             </div>
             <div class="step3"  v-if="active == 2">
                 <div class="success-text">
@@ -120,13 +120,14 @@ export default {
                     questions:this.checkList.toString()
                 }
             })
-            this.loading = false 
-            if(res.status == 'success'){                          
+            this.loading = false
+            if(res.status == 'success'){
+               this.$message.success('稽核成功')
                 if(res.auditResults){
                     this.auditResults = JSON.parse(res.auditResults)
                 }
                 this.auditId = res.id
-                this.active = 1        
+                this.active = 1
             }else if(res.status =='fail'){
                 this.$message.error(res.msg)
             }
@@ -140,16 +141,16 @@ export default {
                 }
             })
             this.loading2 = false
-            if(res.status == 'success'){   
+            if(res.status == 'success'){
                 if(res.auditResults){
                     this.auditResults = JSON.parse(res.auditResults)
-                }      
+                }
             }else if(res.status =='fail'){
                 this.$message.error(res.msg)
             }
         },
         //提交问题
-        async doNetAuditSubmit(){   
+        async doNetAuditSubmit(){
             if(this.form.problemDescribe!='' && this.form.applyName!='' && this.form.applyContact!=''){
                 this.loading = true
                 let res  = await this.$http.get('/OpsDev/networkAudit/doNetAuditSubmit',{
@@ -161,7 +162,7 @@ export default {
                     }
                 })
                 this.loading = false
-                if(res.status == 'success'){   
+                if(res.status == 'success'){
                     this.active = 2
                     this.goTime()
                 }else if(res.status =='fail'){
@@ -177,7 +178,7 @@ export default {
                 if(this.form.applyContact==''){
                     this.applyContact = true
                 }
-            }       
+            }
         },
         //倒计时跳转页面
         goTime(){

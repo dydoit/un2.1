@@ -39,6 +39,16 @@ export default [
           name: '指令详情',
           MENU_ID: '10030103'
         }
+      },
+      {
+        path: 'feed-list',
+        component:() => import('../views/my/instruct/feed-list.vue'),
+        meta: {
+          parentName: '我的指令',
+          parentPath: '/home/my-instruction',
+          name: '指令反馈',
+          MENU_ID: ''
+        }
       }
     ]
   },
@@ -203,7 +213,7 @@ export default [
         meta: {
           name: '脚本详情',
           parentName: '我的处理脚本',
-          parentPath: '/home/my-data-script'
+          parentPath: '/home/my-data-script/detail'
         }
       },
       {
